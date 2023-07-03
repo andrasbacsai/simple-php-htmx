@@ -11,24 +11,18 @@
     <script>
     htmx.logAll();
     </script>
-    <?php  if (isset($_SESSION['user'])) { ?>
+    <?php if (isset($_SESSION['user'])) { ?>
     <button hx-get="/api/user" hx-target="#user-details">User Details</button>
     <button hx-delete="/api/user" hx-confirm="Are you sure you would like to logout?">Logout</button>
     <div id="user-details"></div>
     <?php } ?>
+    <?php if (!isset($_SESSION['user'])) { ?>
     <form hx-post="/api/user">
         <input name="user" placeholder="username">
         <button>Login</button>
-        <?php
-        if (isset($_SESSION['error']))
-        {
-                echo $_SESSION['error'];
-                unset($_SESSION['error']);
-        }
-        ?>
+        <?php if (isset($_SESSION['error'])) echo $_SESSION['error']; ?>
     </form>
-    <!-- <button hx-post="/api/user">Login</button> -->
-
+    <?php } ?>
     <script>
     document.body.addEventListener("session_changed", function(evt) {
         window.location.reload();
