@@ -7,6 +7,12 @@ if ($_SERVER['REQUEST_URI'] == '/') {
         include('main.php');
         exit;
 }
+if ($_SERVER['REQUEST_URI'] == '/api/docker') {
+    exec('docker ps -a --format \'{{json .Names}}\' | jq', $output);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($output);
+    exit;
+}
 if ($_SERVER['REQUEST_URI'] == '/api/user') {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
         header('Content-Type: application/json; charset=utf-8');
@@ -33,6 +39,5 @@ if ($_SERVER['REQUEST_URI'] == '/api/user') {
         header('HX-Refresh: true');
         exit;
     }
-      
  }
 ?>
