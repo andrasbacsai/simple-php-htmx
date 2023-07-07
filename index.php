@@ -1,17 +1,13 @@
 <?php
 session_start();
 $users = [
-    'admin' => '123',
+    'id' => 1,
+    'user' => 'admin',
+    'password' => '123',
 ];
 if ($_SERVER['REQUEST_URI'] == '/') {
         include('main.php');
         exit;
-}
-if ($_SERVER['REQUEST_URI'] == '/api/docker') {
-    exec('docker ps -a --format \'{{json .Names}}\' | jq', $output);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($output);
-    exit;
 }
 if ($_SERVER['REQUEST_URI'] == '/api/user') {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -27,17 +23,21 @@ if ($_SERVER['REQUEST_URI'] == '/api/user') {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
         header('Content-Type: application/json; charset=utf-8');
         $user = $_POST['user'];
-        if (!isset($users[$user])) {
+        $password = $_POST['password'];
+        if (!isset($user) || !isset($password)) {
             $_SESSION['error'] = 'Invalid username or password';
             header('HX-Refresh: true');
             exit;
         }
-        $_SESSION['user'] = [
-            'id' => 1,
-            'name' => 'admin',
-        ];
-        header('HX-Refresh: true');
-        exit;
+        if ($user == $users['user'] && $password == $users['password']) {
+            $_SESSION['user'] = $users;
+            header('HX-Refresh: true');
+            exit;
+        } else {
+            $_SESSION['error'] = 'Invalid username or password';
+            header('HX-Refresh: true');
+            exit;
+        }
     }
  }
 ?>

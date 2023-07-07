@@ -8,18 +8,17 @@
 
 <body>
     <script>
-    //     htmx.logAll();
+    htmx.logAll();
     </script>
     <?php if (isset($_SESSION['user'])) { ?>
     <button hx-get="/api/user" hx-target="#user-details">User Details</button>
     <button hx-delete="/api/user" hx-confirm="Are you sure you would like to logout?">Logout</button>
-    <button hx-get="/api/docker" hx-target="#docker-ps-output">Check docker</button>
-    <pre id="docker-ps-output"></pre>
     <div id="user-details"></div>
     <?php } ?>
     <?php if (!isset($_SESSION['user'])) { ?>
     <form hx-post="/api/user">
         <input name="user" placeholder="username">
+        <input name="password" placeholder="password">
         <button>Login</button>
         <?php if (isset($_SESSION['error'])) echo $_SESSION['error']; ?>
         <?php unset($_SESSION['error']); ?>
