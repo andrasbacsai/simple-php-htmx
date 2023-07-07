@@ -24,6 +24,8 @@
         <?php unset($_SESSION['error']); ?>
     </form>
     <?php } ?>
+
+    About Page
     <script>
     document.body.addEventListener("session_changed", function(evt) {
         window.location.reload();

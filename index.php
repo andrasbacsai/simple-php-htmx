@@ -6,8 +6,17 @@ $users = [
     'password' => '123',
 ];
 if ($_SERVER['REQUEST_URI'] == '/') {
-        include('main.php');
+    include('login.php');
+    exit;
+}
+if ($_SERVER['REQUEST_URI'] == '/about') {
+    if (!isset($_SESSION['user'])) {
+        $_SESSION['error'] = 'You must be logged in to view this page';
+        header('Refresh: 0; url=/');
         exit;
+    }
+    include('about.php');
+    exit;
 }
 if ($_SERVER['REQUEST_URI'] == '/api/user') {
     if($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -31,8 +40,9 @@ if ($_SERVER['REQUEST_URI'] == '/api/user') {
         }
         if ($user == $users['user'] && $password == $users['password']) {
             $_SESSION['user'] = $users;
-            header('HX-Refresh: true');
+            header('HX-Redirect: /about');
             exit;
+
         } else {
             $_SESSION['error'] = 'Invalid username or password';
             header('HX-Refresh: true');
